@@ -1,0 +1,74 @@
+Step-1
+-------
+install store
+------------------
+npm install @ngrx/store
+
+Step-2
+-------
+create state for component
+------------------------------
+
+const initialState = {
+	counter:0
+}
+
+Step-3
+-------
+createAction
+-------------
+import { createAction } from "@ngrx/store";
+
+export const increment = createAction('increment');
+export const decrement = createAction('decrement');
+export const reset = createAction('reset');
+Step-4
+-------
+Create Reducer
+---------------
+
+const _counterReducer = createReducer(initialState, 
+    on(increment , (state)=> {
+        return {
+            ...state,
+            counter:state.counter +1,
+        }
+        
+    } ),
+    on(decrement , (state)=> {
+        return {
+            ...state,
+            counter:state.counter -1,
+        }
+        
+    } ),
+    on(reset , (state)=> {
+        return {
+            ...state,
+            counter: 0,
+        }
+        
+    } )
+    
+    
+    );
+export function counterReducer(state:any , action:any) {
+    return _counterReducer(state , action);
+}
+Step-5
+-------
+Import  the store in app module
+----------------------------------
+
+  StoreModule.forRoot({counter:counterReducer})
+Step-6
+-------
+Retriving Store in component by injecting
+------------------------------------------------
+
+ counter :any;
+  constructor(private store:Store<{ counter: { counter : any} }>) {}
+  ngOnInit() {
+    this.store.select('counter').subscribe(data=> {
+        this.counter = data.counter;
+    })
